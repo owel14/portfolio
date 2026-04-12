@@ -1,0 +1,624 @@
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  /* Paper */
+  --paper:      #f5efe3;   /* inner pages  */
+  --paper-cvr:  #eae0ce;   /* cover stock — slightly darker */
+  /* Navy (outside / cover side) */
+  --navy:       #1b2e46;
+  --navy-dk:    #111e2e;
+  /* Ink on paper */
+  --ink:        #1c1916;
+  --ink-dim:    rgba(28,25,22,0.58);
+  --ink-3:      #8a7b66;
+  --rule-c:     #c8baa6;
+  /* Chalk on navy */
+  --chalk:      #f2ece0;
+  --chalk-dim:  rgba(242,236,224,0.58);
+  /* Fold animation */
+  --dur:        0.68s;
+  --ease:       cubic-bezier(0.22, 1.0, 0.36, 1);
+  /* Panel width — landscape A4 ratio (99mm : 210mm) */
+  --pw: clamp(190px, 24vw, 270px);
+  --ph: calc(var(--pw) * 2.121);   /* A4 height per column */
+  /* Paper grain texture (SVG fractal noise) */
+  --grain: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch' result='f'/><feColorMatrix type='saturate' values='0' in='f'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══════════════════════════════════════════
+   SCENE
+══════════════════════════════════════════ */
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #0d0b08;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% 42%, rgba(50,34,14,0.5) 0%, transparent 100%);
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.pamphlet-root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: clamp(22px, 4vw, 52px);
+}
+
+.pamphlet-stage {
+  --stage-pad: clamp(22px, 5vw, 76px);
+  width: min(100%, calc((var(--pw) * 3) + (var(--stage-pad) * 2)));
+  min-height: min(calc(var(--ph) + (var(--stage-pad) * 1.5)), calc(100vh - 118px));
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1800px;
+  perspective-origin: 50% 44%;
+  transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: none;
+  isolation: isolate;
+}
+
+.pamphlet-stage::before {
+  content: '';
+  position: absolute;
+  width: min(82%, calc(var(--pw) * 2.55));
+  height: clamp(64px, 12vw, 130px);
+  left: 50%;
+  bottom: clamp(10px, 4vh, 56px);
+  transform: translateX(-50%) rotateX(72deg) translateZ(-120px);
+  transform-origin: center;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.32) 44%, transparent 72%);
+  filter: blur(12px);
+  opacity: 0.78;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.pamphlet-stage.is-dragging { cursor: grabbing; }
+
+/* ══════════════════════════════════════════
+   PAMPHLET CONTAINER
+══════════════════════════════════════════ */
+.pamphlet {
+  --rx: -6deg;
+  --ry: -12deg;
+  --rz: 0deg;
+  width:  calc(var(--pw) * 3);
+  height: var(--ph);
+  position: relative;
+  /* Perspective on parent gives 3-D depth to child panels */
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz));
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out;
+}
+
+.pamphlet-stage:hover .pamphlet,
+.pamphlet-stage.is-dragging .pamphlet {
+  will-change: transform;
+}
+
+.pamphlet-stage.is-dragging .pamphlet { transition: none; }
+
+.pamphlet:focus-visible {
+  outline: 2px solid rgba(242,236,224,0.68);
+  outline-offset: 16px;
+}
+
+/* ══════════════════════════════════════════
+   PANELS — shared base
+══════════════════════════════════════════ */
+.panel {
+  position: absolute;
+  top: 0;
+  width:  var(--pw);
+  height: 100%;
+  /* 3-D card-flip: preserve children in 3-D space */
+  transform-style: preserve-3d;
+  transition:
+    transform  var(--dur) var(--ease),
+    box-shadow var(--dur) ease,
+    z-index    0s;
+}
+
+.panel[role="button"]:focus-visible {
+  outline: 2px solid rgba(242,236,224,0.68);
+  outline-offset: -6px;
+}
+
+/* Paper edges (simulate paper thickness) */
+.panel {
+  border-top:    1px solid rgba(0,0,0,0.13);
+  border-bottom: 1px solid rgba(0,0,0,0.18);
+}
+
+/* ── Left panel ── */
+.panel-left {
+  left: 0;
+  transform-origin: right center;
+  z-index: 2;
+  display: block;          /* <label> needs block */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ── Centre panel (doesn't fold) ── */
+.panel-center {
+  left: var(--pw);
+  z-index: 1;
+  background: transparent;
+}
+
+/* ── Right panel ── */
+.panel-right {
+  left: calc(var(--pw) * 2);
+  transform-origin: left center;
+  z-index: 2;
+  display: block;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ══════════════════════════════════════════
+   CARD-FLIP FACES
+   Each outer panel has two faces stacked in
+   3-D, backface-visibility hides the resting
+   face; the other face flips into view.
+══════════════════════════════════════════ */
+.face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-clip: padding-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Front face: inside page (cream paper) */
+.face-front {
+  background: var(--paper);
+  transform: translateZ(0.6px);
+}
+
+/* Back face: outside / cover (navy) — pre-rotated 180° */
+.face-back {
+  background: var(--navy);
+  transform: rotateY(180deg) translateZ(0.6px);
+}
+
+/* Centre panel also has front/back faces so the outside differs from the inside. */
+.panel-center .panel-content {
+  position: relative;
+  height: 100%;
+  transition: opacity 0.18s ease;
+}
+
+.panel-right .face-front .panel-content {
+  transition: opacity 0.18s ease;
+}
+
+/* ══════════════════════════════════════════
+   FOLD STATES
+   is-fold-right → right folds inward under the cover (rotateY -180°)
+   is-fold-left  → left folds OVER everything (rotateY +180°)
+   Default React state = pamphlet closed.
+══════════════════════════════════════════ */
+
+/* RIGHT folds inward under the cover but above the centre panel. */
+.pamphlet-root.is-fold-right .panel-right {
+  transform: rotateY(-180deg);
+  z-index: 4;
+  box-shadow: none;
+}
+
+/* LEFT folds over: swing toward viewer (positive Y), lands as front cover */
+.pamphlet-root.is-fold-left .panel-left {
+  transform: rotateY(180deg);
+  z-index: 4;
+}
+
+.pamphlet-root.is-fold-left.is-top-left .panel-left,
+.pamphlet-root.is-fold-right.is-top-right .panel-right {
+  z-index: 6;
+}
+
+.pamphlet-root.is-fold-left .panel-left .face-front .panel-content,
+.pamphlet-root.is-fold-right .panel-right .face-front .panel-content {
+  opacity: 0;
+}
+
+.pamphlet-root.is-fold-left.is-fold-right.is-top-left .panel-right .panel-content,
+.pamphlet-root.is-fold-left.is-fold-right.is-top-right .panel-left .panel-content {
+  opacity: 0;
+}
+
+.pamphlet-root.is-fold-left .pamphlet.is-view-back .panel-center,
+.pamphlet-root.is-fold-right .pamphlet.is-view-back .panel-center {
+  z-index: 7;
+}
+
+.pamphlet-root.is-fold-left .pamphlet.is-view-back .panel-left,
+.pamphlet-root.is-fold-right .pamphlet.is-view-back .panel-right {
+  z-index: 2;
+}
+
+/* ══════════════════════════════════════════
+   PANEL SHADOWS
+   Create physical depth at fold lines.
+══════════════════════════════════════════ */
+
+/* Outer cast shadows + inset crease glint */
+.panel-left {
+  box-shadow:
+    inset -1px 0 0 rgba(255,255,255,0.60),
+    inset -5px 0 10px rgba(0,0,0,0.06),
+    5px 0 20px rgba(0,0,0,0.35);
+}
+.panel-right {
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,0.60),
+    inset 5px 0 10px rgba(0,0,0,0.06),
+    -5px 0 20px rgba(0,0,0,0.35);
+}
+
+/* Crease shadow on centre edges (visible when panels are open) */
+.panel-center::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background:
+    linear-gradient(to right,
+      rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px,
+      rgba(0,0,0,0.04) 16px, transparent 32px),
+    linear-gradient(to left,
+      rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px,
+      rgba(0,0,0,0.04) 16px, transparent 32px),
+    /* subtle top/bottom vignette (paper curl) */
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.04) 0%, transparent 12%,
+      transparent 88%, rgba(0,0,0,0.06) 100%);
+  transition: opacity var(--dur) ease;
+}
+
+/* Fade crease shadows when both panels are open */
+.pamphlet-root.is-fold-right .panel-center::before { opacity: 0; }
+
+/* Front-face lighting gradient: darkens toward the free edge while folded */
+.face-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: background var(--dur) ease;
+}
+.panel-left  .face-front::after { background: transparent; }
+.panel-right .face-front::after { background: transparent; }
+
+/* Also add specular crease highlight at hinge edge (on face-front) */
+.panel-left  .face-front::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 4px;
+  background: linear-gradient(to left,
+    rgba(255,255,255,0.75) 0px,
+    rgba(255,255,255,0.18) 2px,
+    transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+.panel-right .face-front::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 4px;
+  background: linear-gradient(to right,
+    rgba(255,255,255,0.75) 0px,
+    rgba(255,255,255,0.18) 2px,
+    transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Crease highlight on BACK face (navy) */
+.panel-left  .face-back::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 4px;
+  background: linear-gradient(to right,
+    rgba(255,255,255,0.35) 0px,
+    rgba(255,255,255,0.08) 2px,
+    transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+.panel-right .face-back::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 4px;
+  background: linear-gradient(to left,
+    rgba(255,255,255,0.35) 0px,
+    rgba(255,255,255,0.08) 2px,
+    transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Hover */
+.panel-left:hover  .face-front::after { background: rgba(0,0,0,0.04); }
+.panel-right:hover .face-front::after { background: rgba(0,0,0,0.04); }
+.panel-left:hover  .face-back::after,
+.panel-right:hover .face-back::after { opacity: 0.85; }
+
+/* ══════════════════════════════════════════
+   PAPER GRAIN TEXTURE
+   Applied via panel-content::after so it
+   overlays all content without blocking clicks.
+══════════════════════════════════════════ */
+.panel-content::after {
+  content: '';
+  position: absolute;
+  inset: -60px;
+  background: var(--grain);
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 10;
+}
+/* Grain on paper (cream) face — multiply darkens slightly */
+.face-front .panel-content::after,
+.panel-center .panel-content::after {
+  mix-blend-mode: multiply;
+  opacity: 0.13;
+}
+/* Grain on navy face — screen lightens slightly */
+.face-back .panel-content::after {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+.pamphlet-stage.is-dragging .panel-content::after {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   PANEL CONTENT — layout
+══════════════════════════════════════════ */
+.panel-content {
+  padding: clamp(24px, 3.8%, 38px) clamp(20px, 3.8%, 30px) clamp(20px, 3%, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.3vh, 15px);
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  transition: opacity 0.18s ease;
+}
+
+/* ── Typography ── */
+.label {
+  font-size: clamp(8px, 0.8vw, 9.5px);
+  font-weight: 400;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.14;
+}
+.title em {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.07em;
+}
+.title.ink  { color: var(--ink); }
+.title.chalk { color: var(--chalk); }
+
+.rule { border: none; flex-shrink: 0; }
+.ink-rule   { border-top: 1px solid var(--rule-c); }
+.chalk-rule { border-top: 1px solid rgba(242,236,224,0.22); }
+
+.body-text  { font-size: clamp(11px, 1.05vw, 13.5px); font-weight: 300; line-height: 1.82; }
+.ink-dim    { color: var(--ink-dim); }
+.chalk-dim  { color: var(--chalk-dim); }
+
+.footer {
+  margin-top: auto;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--ink-3);
+  opacity: 0.6;
+}
+
+.tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  background: rgba(28,25,22,0.07);
+  border: 1px solid rgba(28,25,22,0.15);
+  color: var(--ink-3);
+  font-size: clamp(7px, 0.68vw, 9px);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(7px, 0.85vh, 11px);
+}
+.list li {
+  font-size: clamp(11px, 1.05vw, 13.5px);
+  font-weight: 300;
+  padding-left: 15px;
+  position: relative;
+}
+.list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  opacity: 0.4;
+}
+.ink-dim.list li::before  { color: var(--ink); }
+.chalk-dim.list li::before { color: var(--chalk); }
+
+.cta {
+  margin-top: auto;
+  font-size: clamp(8px, 0.78vw, 10px);
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.ink-cta   { color: var(--ink-3); }
+.chalk-cta { color: var(--chalk-dim); }
+
+/* ── FRONT COVER (face-back of left panel) ── */
+.cover {
+  justify-content: flex-end;
+  background: none;   /* bg is on .face-back already */
+}
+.cover-eye {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(242,236,224,0.45);
+  margin-bottom: 8px;
+}
+.cover-name {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(26px, 3.2vw, 48px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--chalk);
+}
+.cover-name em {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: rgba(242,236,224,0.75);
+}
+.cover-bar {
+  width: 36px;
+  height: 2px;
+  background: rgba(242,236,224,0.35);
+  margin: 16px 0;
+  flex-shrink: 0;
+}
+.cover-role {
+  font-size: clamp(10px, 1vw, 13px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(242,236,224,0.55);
+}
+.cover-sub {
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(242,236,224,0.42);
+  margin-top: 8px;
+}
+.cover-cta {
+  margin-top: auto;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(242,236,224,0.30);
+}
+
+/* ── HINT ── */
+.hint {
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.15);
+  user-select: none;
+  transition: opacity 0.4s;
+}
+/* Fade hint once the pamphlet is opened */
+.pamphlet-root:not(.is-fold-left) .hint { opacity: 0; }
+
+
+/* Mobile keeps the pamphlet as a 3-D object, just scaled down. */
+@media (max-width: 700px) {
+
+  :root {
+    --pw: clamp(92px, 29vw, 128px);
+  }
+
+  .pamphlet-root {
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 12px;
+    min-height: 100svh;
+  }
+
+  .pamphlet-stage {
+    width: 100%;
+    min-height: min(calc(var(--ph) + 112px), calc(100svh - 82px));
+    perspective: 1250px;
+    perspective-origin: 50% 42%;
+  }
+
+  .pamphlet-stage::before {
+    width: min(90%, calc(var(--pw) * 2.75));
+    height: 72px;
+    bottom: 6px;
+  }
+
+  .pamphlet {
+    width: calc(var(--pw) * 3);
+    height: var(--ph);
+    perspective: 1450px;
+  }
+
+  .panel-content {
+    padding: 18px 14px 20px;
+    gap: 8px;
+  }
+
+  .label { font-size: 7.5px; letter-spacing: 2px; }
+  .title { font-size: clamp(14px, 4.2vw, 18px); }
+  .body-text,
+  .list li { font-size: clamp(8.5px, 2.6vw, 11px); line-height: 1.5; }
+  .tag { font-size: 7px; letter-spacing: 1px; padding: 2px 5px; }
+  .cta { font-size: 7px; letter-spacing: 1.2px; }
+  .cover-name { font-size: clamp(20px, 7vw, 28px); }
+  .cover-role { font-size: 8px; letter-spacing: 1.6px; }
+  .cover-sub { font-size: 9px; line-height: 1.5; }
+  .cover-eye,
+  .cover-cta { font-size: 7px; letter-spacing: 1.4px; }
+  .cover-bar { margin: 10px 0; }
+
+  .hint {
+    text-align: center;
+    opacity: 1 !important;
+    font-size: 8px;
+    max-width: 34ch;
+    line-height: 1.6;
+  }
+}
