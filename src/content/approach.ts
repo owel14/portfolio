@@ -1,15 +1,30 @@
-import type { BodyListPanel } from './types';
+export type ApproachContent = {
+  label: string;
+  title: string;
+  emphasis: string;
+  degree: string;
+  gpa: string;
+  period: string;
+  coursesLabel: string;
+  items: readonly string[];
+  cta: string;
+};
 
-export const approach: BodyListPanel = {
-  label: 'Approach',
-  title: 'Practical',
-  emphasis: 'Builds',
-  body: 'I turn rough product ideas into polished interfaces with clear structure, fast feedback, and careful delivery.',
+export const approach: ApproachContent = {
+  label: 'Education',
+  title: 'University',
+  emphasis: 'of Auckland',
+  degree: 'BE(Hons) Software Engineering',
+  gpa: '8.1',
+  period: '2022 – 2025',
+  coursesLabel: 'Relevant Courses',
   items: [
-    'Interaction prototypes',
-    'Component architecture',
-    'Performance passes',
-    'Accessible UI details',
+    'Soft. Eng. Design',
+    'Software Architecture',
+    'AI & Machine Learning',
+    'Networks & Security',
+    'Object-Oriented Prog.',
+    'Database Systems',
   ],
-  cta: 'Flip back for about →',
+  cta: 'Flip for summary →',
 };

@@ -1,9 +1,8 @@
-import type { Theme } from '../content/types';
 import { cx } from './cx';
 
 type PanelListProps = {
   items: readonly string[];
-  theme: Theme;
+  theme: 'ink' | 'chalk';
 };
 
 export function PanelList({ items, theme }: PanelListProps) {

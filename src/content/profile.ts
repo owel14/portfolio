@@ -1,9 +1,21 @@
-import type { Profile } from './types';
+export type Profile = {
+  year: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  intro: string;
+  available: boolean;
+  location: string;
+  gpa: string;
+};
 
 export const profile: Profile = {
-  year: '2026',
-  firstName: 'Alex',
-  lastName: 'Chen',
-  role: 'Creative Developer',
-  intro: 'Design-led front-end engineering for the modern web.',
+  year: '2025',
+  firstName: 'Oliver',
+  lastName: 'Lin',
+  role: 'Software Engineer',
+  intro: 'Full-stack dev & user-focused software.',
+  available: true,
+  location: 'NZ',
+  gpa: '8.1',
 };

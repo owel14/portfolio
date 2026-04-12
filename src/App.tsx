@@ -89,6 +89,7 @@ export default function App() {
       </div>
 
       <p className="hint">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
+
     </main>
   );
 }

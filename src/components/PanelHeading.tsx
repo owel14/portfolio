@@ -1,9 +1,8 @@
-import type { HeadingPanel, Theme } from '../content/types';
 import { cx } from './cx';
 
 type PanelHeadingProps = {
-  panel: HeadingPanel;
-  theme: Theme;
+  panel: { label: string; title: string; emphasis: string };
+  theme: 'ink' | 'chalk';
 };
 
 export function PanelHeading({ panel, theme }: PanelHeadingProps) {
