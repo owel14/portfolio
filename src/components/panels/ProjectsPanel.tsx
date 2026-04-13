@@ -18,12 +18,12 @@ export function ProjectsPanel() {
           <Bullet>Researched and implemented novel techniques in C++ to improve state-of-the-art external memory vector database querying, achieving a 15% performance gain</Bullet>
         </PanelCard>
 
-        <PanelCard title="EV Energy Monitor" badge="Capstone" layout="inline">
+        <PanelCard title="Cross-Platform Web Application" badge="Capstone" layout="inline">
           <Bullet>Built a real-time energy monitoring system for electric vehicles with React TypeScript frontend and C# .NET CORS backend</Bullet>
           <Bullet>Implemented end-to-end features including data persistence, API endpoint design, and responsive UI components</Bullet>
         </PanelCard>
 
-        <PanelCard title="Chopsticks Game" badge="Personal" layout="inline" isLast>
+        <PanelCard title="Multiplayer Web Game" badge="Personal" layout="inline" isLast>
           <Bullet>Created an interactive online multiplayer game based on the chopsticks hand game with React Next.js</Bullet>
           <Bullet>Developed real-time multiplayer functionality handling concurrent user sessions and game state management</Bullet>
         </PanelCard>

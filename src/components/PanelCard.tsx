@@ -25,7 +25,8 @@ export function PanelCard({
     <div className={[
       'flex flex-col',
       stacked ? 'gap-0.5' : 'gap-1.5',
-      isFirst ? (stacked ? 'pb-3' : 'pb-2.5') : (stacked ? 'py-3' : 'py-2.5'),
+      isFirst ? '' : 'pt-1',
+      isLast ? '' : 'pb-1',
       isLast ? '' : 'border-b border-ink/10',
     ].filter(Boolean).join(' ')}>
 
@@ -33,9 +34,15 @@ export function PanelCard({
         <>
           <div className="flex flex-col gap-px">
             <span className="text-sm font-semibold text-ink leading-[1.2]">{title}</span>
-            {subtitle && <span className="text-xs font-light italic text-ink">{subtitle}</span>}
+            {subtitle ? (
+              <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+                <span className="text-xs font-light italic text-ink">{subtitle}</span>
+                <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
+              </div>
+            ) : (
+              <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary">{badge}</span>
+            )}
           </div>
-          <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary pl-4.25">{badge}</span>
         </>
       ) : (
         <div className="flex items-center gap-1.5">
@@ -44,7 +51,7 @@ export function PanelCard({
         </div>
       )}
 
-      <ul className={`list-none flex flex-col gap-0.75 ${stacked ? 'mt-0.75 pl-4.25' : ''}`}>
+      <ul className={`list-none flex flex-col gap-0.75 ${stacked ? 'mt-0.5 pl-2' : ''}`}>
         {children}
       </ul>
     </div>
