@@ -25,6 +25,11 @@ type RotationState = {
   suppressClick: boolean;
 };
 
+type ActivePointerHandlers = {
+  move: (e: PointerEvent) => void;
+  end: () => void;
+};
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
@@ -51,6 +56,10 @@ export function usePamphletRotation() {
     suppressClick: false,
   });
 
+  // Stores the exact handler references added to window so they can be removed
+  // using the same reference, without handlePointerEnd needing to close over itself.
+  const activeHandlersRef = useRef<ActivePointerHandlers | null>(null);
+
   const renderRotation = useCallback((): void => {
     frameRef.current = 0;
     const pamphlet = pamphletRef.current;
@@ -58,8 +67,8 @@ export function usePamphletRotation() {
     if (pamphlet === null) return;
 
     const { x, y } = rotationRef.current;
-    pamphlet.style.setProperty('--rx', `${x}deg`);
-    pamphlet.style.setProperty('--ry', `${y}deg`);
+    pamphlet.style.setProperty('--rx', `${String(x)}deg`);
+    pamphlet.style.setProperty('--ry', `${String(y)}deg`);
     pamphlet.classList.toggle('is-view-back', isBackFacing(y));
   }, []);
 
@@ -112,16 +121,21 @@ export function usePamphletRotation() {
       stage.classList.remove('is-dragging');
     }
 
-    window.removeEventListener('pointermove', handlePointerMove);
-    window.removeEventListener('pointerup', handlePointerEnd);
-    window.removeEventListener('pointercancel', handlePointerEnd);
+    // Remove using the exact references that were added — no self-reference needed.
+    const handlers = activeHandlersRef.current;
+    if (handlers !== null) {
+      window.removeEventListener('pointermove', handlers.move);
+      window.removeEventListener('pointerup', handlers.end);
+      window.removeEventListener('pointercancel', handlers.end);
+      activeHandlersRef.current = null;
+    }
 
     if (rotation.moved) {
       rotation.suppressClick = true;
       window.clearTimeout(suppressTimerRef.current);
       suppressTimerRef.current = window.setTimeout(clearClickSuppression, CLICK_SUPPRESSION_MS);
     }
-  }, [clearClickSuppression, handlePointerMove]);
+  }, [clearClickSuppression]);
 
   const handlePointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>): void => {
     if (event.button !== 0 && event.pointerType !== 'touch') return;
@@ -140,6 +154,8 @@ export function usePamphletRotation() {
       stage.classList.add('is-dragging');
     }
 
+    // Store the exact references before adding so handlePointerEnd can remove them.
+    activeHandlersRef.current = { move: handlePointerMove, end: handlePointerEnd };
     window.addEventListener('pointermove', handlePointerMove, { passive: false });
     window.addEventListener('pointerup', handlePointerEnd);
     window.addEventListener('pointercancel', handlePointerEnd);
@@ -192,11 +208,14 @@ export function usePamphletRotation() {
         cancelAnimationFrame(frameRef.current);
       }
 
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerEnd);
-      window.removeEventListener('pointercancel', handlePointerEnd);
+      const handlers = activeHandlersRef.current;
+      if (handlers !== null) {
+        window.removeEventListener('pointermove', handlers.move);
+        window.removeEventListener('pointerup', handlers.end);
+        window.removeEventListener('pointercancel', handlers.end);
+      }
     };
-  }, [handlePointerEnd, handlePointerMove, renderRotation]);
+  }, [renderRotation]);
 
   return {
     stageRef,

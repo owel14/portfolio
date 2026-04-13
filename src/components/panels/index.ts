@@ -1,6 +1,6 @@
-export { AboutPanel } from './AboutPanel';
-export { ApproachPanel } from './ApproachPanel';
-export { ContactPanel } from './ContactPanel';
 export { CoverPanel } from './CoverPanel';
-export { ServicesPanel } from './ServicesPanel';
-export { WorkPanel } from './WorkPanel';
+export { ExperiencePanel } from './ExperiencePanel';
+export { ProjectsPanel } from './ProjectsPanel';
+export { EducationPanel } from './EducationPanel';
+export { SkillsPanel } from './SkillsPanel';
+export { ProfilePanel } from './ProfilePanel';

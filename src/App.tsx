@@ -3,12 +3,12 @@ import { cx } from './components/cx';
 import { TogglePanel } from './components/TogglePanel';
 import type { PanelSide } from './components/TogglePanel';
 import {
-  AboutPanel,
-  ApproachPanel,
-  ContactPanel,
   CoverPanel,
-  ServicesPanel,
-  WorkPanel,
+  ExperiencePanel,
+  ProjectsPanel,
+  EducationPanel,
+  SkillsPanel,
+  ProfilePanel,
 } from './components/panels';
 import { usePamphletRotation } from './usePamphletRotation';
 
@@ -61,7 +61,7 @@ export default function App() {
         >
           <TogglePanel side="left" folded={folds.left} onToggle={toggleLeft}>
             <div className="face face-front">
-              <ContactPanel />
+              <ExperiencePanel />
             </div>
             <div className="face face-back">
               <CoverPanel />
@@ -70,25 +70,25 @@ export default function App() {
 
           <div className="panel panel-center">
             <div className="face face-front">
-              <AboutPanel />
+              <ProjectsPanel />
             </div>
             <div className="face face-back">
-              <ApproachPanel />
+              <EducationPanel />
             </div>
           </div>
 
           <TogglePanel side="right" folded={folds.right} onToggle={toggleRight}>
             <div className="face face-front">
-              <ServicesPanel />
+              <SkillsPanel />
             </div>
             <div className="face face-back">
-              <WorkPanel />
+              <ProfilePanel />
             </div>
           </TogglePanel>
         </div>
       </div>
 
-      <p className="hint">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
+      <p className="hint text-[10px] font-light tracking-[2.5px] uppercase text-white/15 select-none transition-opacity duration-[400ms]">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
 
     </main>
   );

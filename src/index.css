@@ -1,0 +1,364 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f5efe3;
+  --color-paper-cover: #eae0ce;
+  --color-navy: #1b2e46;
+  --color-navy-dark: #111e2e;
+  --color-ink: #1c1916;
+  --color-ink-secondary: #3d3128;
+  --color-rule: #c8baa6;
+  --color-chalk: #f2ece0;
+  --font-family-serif: 'Libre Baskerville', Georgia, serif;
+  --font-family-sans: 'Source Sans 3', system-ui, sans-serif;
+}
+
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --pw: clamp(200px, 26vw, 310px);
+  --ph: calc(var(--pw) * 2.121);
+  --dur: 0.68s;
+  --ease: cubic-bezier(0.22, 1.0, 0.36, 1);
+  --grain: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch' result='f'/><feColorMatrix type='saturate' values='0' in='f'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══════════════════════════════════════════
+   SCENE
+══════════════════════════════════════════ */
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #ffffff;
+  font-family: 'Source Sans 3', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pamphlet-root {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: clamp(12px, 2vw, 28px);
+}
+
+.pamphlet-stage {
+  --stage-pad: clamp(12px, 2vw, 32px);
+  width: min(100%, calc((var(--pw) * 3) + (var(--stage-pad) * 2)));
+  min-height: min(calc(var(--ph) + (var(--stage-pad) * 1.5)), calc(100vh - 118px));
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1800px;
+  perspective-origin: 50% 44%;
+  transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: none;
+  isolation: isolate;
+}
+
+.pamphlet-stage::before { display: none; }
+.pamphlet-stage.is-dragging { cursor: grabbing; }
+
+/* ══════════════════════════════════════════
+   PAMPHLET CONTAINER
+══════════════════════════════════════════ */
+.pamphlet {
+  --rx: -6deg;
+  --ry: -12deg;
+  --rz: 0deg;
+  width: calc(var(--pw) * 3);
+  height: var(--ph);
+  position: relative;
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz));
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out;
+}
+
+.pamphlet-stage:hover .pamphlet,
+.pamphlet-stage.is-dragging .pamphlet { will-change: transform; }
+.pamphlet-stage.is-dragging .pamphlet { transition: none; }
+
+.pamphlet:focus-visible {
+  outline: 2px solid rgba(242,236,224,0.68);
+  outline-offset: 16px;
+}
+
+/* ══════════════════════════════════════════
+   PANELS
+══════════════════════════════════════════ */
+.panel {
+  position: absolute;
+  top: 0;
+  width: var(--pw);
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) ease, z-index 0s;
+  border-top: 1px solid rgba(0,0,0,0.13);
+  border-bottom: 1px solid rgba(0,0,0,0.18);
+}
+
+.panel[role="button"]:focus-visible {
+  outline: 2px solid rgba(242,236,224,0.68);
+  outline-offset: -6px;
+}
+
+.panel-left {
+  left: 0;
+  transform-origin: right center;
+  z-index: 2;
+  display: block;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    inset -1px 0 0 rgba(255,255,255,0.60),
+    inset -5px 0 10px rgba(0,0,0,0.06),
+    5px 0 20px rgba(0,0,0,0.35);
+}
+
+.panel-center {
+  left: var(--pw);
+  z-index: 1;
+  background: transparent;
+}
+
+.panel-right {
+  left: calc(var(--pw) * 2);
+  transform-origin: left center;
+  z-index: 2;
+  display: block;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,0.60),
+    inset 5px 0 10px rgba(0,0,0,0.06),
+    -5px 0 20px rgba(0,0,0,0.35);
+}
+
+/* ══════════════════════════════════════════
+   CARD-FLIP FACES
+══════════════════════════════════════════ */
+.face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-clip: padding-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.face-front {
+  background: var(--color-paper);
+  transform: translateZ(0.6px);
+}
+
+.face-back {
+  background: var(--color-navy);
+  transform: rotateY(180deg) translateZ(0.6px);
+}
+
+.panel-center .panel-content {
+  position: relative;
+  height: 100%;
+  transition: opacity 0.18s ease;
+}
+
+.panel-right .face-front .panel-content {
+  transition: opacity 0.18s ease;
+}
+
+/* ══════════════════════════════════════════
+   FOLD STATES
+══════════════════════════════════════════ */
+.pamphlet-root.is-fold-right .panel-right {
+  transform: rotateY(-180deg);
+  z-index: 4;
+  box-shadow: none;
+}
+
+.pamphlet-root.is-fold-left .panel-left {
+  transform: rotateY(180deg);
+  z-index: 4;
+}
+
+.pamphlet-root.is-fold-left.is-top-left .panel-left,
+.pamphlet-root.is-fold-right.is-top-right .panel-right { z-index: 6; }
+
+.pamphlet-root.is-fold-left .panel-left .face-front .panel-content,
+.pamphlet-root.is-fold-right .panel-right .face-front .panel-content { opacity: 0; }
+
+.pamphlet-root.is-fold-left.is-fold-right.is-top-left .panel-right .panel-content,
+.pamphlet-root.is-fold-left.is-fold-right.is-top-right .panel-left .panel-content { opacity: 0; }
+
+.pamphlet-root.is-fold-left .pamphlet.is-view-back .panel-center,
+.pamphlet-root.is-fold-right .pamphlet.is-view-back .panel-center { z-index: 7; }
+
+.pamphlet-root.is-fold-left .pamphlet.is-view-back .panel-left,
+.pamphlet-root.is-fold-right .pamphlet.is-view-back .panel-right { z-index: 2; }
+
+/* ══════════════════════════════════════════
+   SHADOWS & CREASE EFFECTS
+══════════════════════════════════════════ */
+.panel-center::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px, rgba(0,0,0,0.04) 16px, transparent 32px),
+    linear-gradient(to left,  rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px, rgba(0,0,0,0.04) 16px, transparent 32px),
+    linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.06) 100%);
+  transition: opacity var(--dur) ease;
+}
+
+.pamphlet-root.is-fold-right .panel-center::before { opacity: 0; }
+
+.face-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: background var(--dur) ease;
+}
+.panel-left  .face-front::after { background: transparent; }
+.panel-right .face-front::after { background: transparent; }
+
+.panel-left .face-front::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 4px;
+  background: linear-gradient(to left, rgba(255,255,255,0.75) 0px, rgba(255,255,255,0.18) 2px, transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+.panel-right .face-front::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 4px;
+  background: linear-gradient(to right, rgba(255,255,255,0.75) 0px, rgba(255,255,255,0.18) 2px, transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.panel-left .face-back::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 4px;
+  background: linear-gradient(to right, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.08) 2px, transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+.panel-right .face-back::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 4px;
+  background: linear-gradient(to left, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.08) 2px, transparent 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.panel-left:hover  .face-front::after { background: rgba(0,0,0,0.04); }
+.panel-right:hover .face-front::after { background: rgba(0,0,0,0.04); }
+.panel-left:hover  .face-back::after,
+.panel-right:hover .face-back::after  { opacity: 0.85; }
+
+/* ══════════════════════════════════════════
+   PAPER GRAIN
+══════════════════════════════════════════ */
+.panel-content::after {
+  content: '';
+  position: absolute;
+  inset: -60px;
+  background: var(--grain);
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.face-front .panel-content::after,
+.panel-center .panel-content::after {
+  mix-blend-mode: multiply;
+  opacity: 0.13;
+}
+
+.face-back .panel-content::after {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+.pamphlet-stage.is-dragging .panel-content::after { display: none; }
+
+/* ══════════════════════════════════════════
+   PANEL CONTENT
+══════════════════════════════════════════ */
+.panel-content {
+  padding: clamp(24px, 3.8%, 38px) clamp(20px, 3.8%, 30px) clamp(20px, 3%, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.3vh, 15px);
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  transition: opacity 0.18s ease;
+}
+
+/* ══════════════════════════════════════════
+   HINT
+══════════════════════════════════════════ */
+.pamphlet-root:not(.is-fold-left) .hint { opacity: 0; }
+
+/* ══════════════════════════════════════════
+   MOBILE
+══════════════════════════════════════════ */
+@media (max-width: 700px) {
+  :root { --pw: clamp(92px, 29vw, 128px); }
+
+  .pamphlet-root {
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 12px;
+    min-height: 100svh;
+  }
+
+  .pamphlet-stage {
+    width: 100%;
+    min-height: min(calc(var(--ph) + 112px), calc(100svh - 82px));
+    perspective: 1250px;
+    perspective-origin: 50% 42%;
+  }
+
+  .pamphlet-stage::before { display: none; }
+
+  .pamphlet {
+    width: calc(var(--pw) * 3);
+    height: var(--ph);
+    perspective: 1450px;
+  }
+
+  .panel-content {
+    padding: 18px 14px 20px;
+    gap: 8px;
+  }
+}
