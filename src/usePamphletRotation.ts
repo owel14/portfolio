@@ -121,7 +121,7 @@ export function usePamphletRotation() {
       stage.classList.remove('is-dragging');
     }
 
-    // Remove using the exact references that were added — no self-reference needed.
+    // Remove using the exact references that were added - no self-reference needed.
     const handlers = activeHandlersRef.current;
     if (handlers !== null) {
       window.removeEventListener('pointermove', handlers.move);
