@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Bullet } from './Bullet';
 import { cx } from './cx';
 import { PanelCard } from './PanelCard';
@@ -6,6 +7,8 @@ import type { PanelCardLayout } from './PanelCard';
 export type PanelEntry = {
   readonly title: string;
   readonly badge: string;
+  readonly href?: string;
+  readonly titleIcon?: ReactNode;
   readonly subtitle?: string;
   readonly bullets: readonly string[];
 };
@@ -27,7 +30,9 @@ export function PanelEntryList({ entries, layout, className }: PanelEntryListPro
           layout={layout}
           isFirst={index === 0}
           isLast={index === entries.length - 1}
+          {...(entry.href === undefined ? {} : { href: entry.href })}
           {...(entry.subtitle === undefined ? {} : { subtitle: entry.subtitle })}
+          {...(entry.titleIcon === undefined ? {} : { titleIcon: entry.titleIcon })}
         >
           {entry.bullets.map((bullet) => (
             <Bullet key={`${entry.title}-${bullet}`}>{bullet}</Bullet>

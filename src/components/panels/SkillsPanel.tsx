@@ -94,7 +94,7 @@ export function SkillsPanel() {
         <div className="flex flex-col gap-3">
           {skillGroups.map((group) => (
             <div key={group.label} className="flex flex-col gap-0.75">
-              <span className="text-sm font-semibold text-ink">
+              <span className="text-xs font-semibold text-ink">
                 {group.label}
               </span>
               <div className="flex flex-wrap gap-1">
@@ -122,7 +122,7 @@ export function SkillsPanel() {
             key={reference.email}
             className={`flex flex-col gap-px ${index < references.length - 1 ? "pb-1.5 border-b border-ink/7" : ""}`}
           >
-            <span className="text-sm font-semibold text-ink">
+            <span className="text-xs font-semibold text-ink">
               {reference.name}
             </span>
             <span className="text-xs font-light text-ink">
