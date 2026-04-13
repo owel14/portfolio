@@ -14,6 +14,8 @@ const projectEntries = [
   {
     title: 'Vector DB Research',
     badge: 'Research',
+    href: 'https://github.com/owel14/portfolio/blob/main/public/reports/vector-db-research-report.pdf',
+    titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
     bullets: [
       'Optimized data querying for terabyte-scale datasets that exceed main memory capacity',
       'Researched and implemented novel techniques in C++ to improve state-of-the-art external memory vector database querying, achieving a 15% performance gain',
@@ -30,7 +32,7 @@ const projectEntries = [
   {
     title: 'Multiplayer Web Game',
     badge: 'Personal',
-    href: 'https://example.com/multiplayer-web-game',
+    href: 'https://chopsticks-online.vercel.app/',
     titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
     bullets: [
       'Created an interactive online multiplayer game based on the chopsticks hand game with React Next.js',

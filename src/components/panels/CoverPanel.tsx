@@ -21,17 +21,17 @@ export function CoverPanel() {
   return (
     <div className="panel-content">
       <div className="flex flex-col">
-        <h1 className="font-serif text-4xl font-bold leading-[1.05] text-chalk">
+        <h1 className="font-serif text-4xl font-bold leading-[1.05] text-white">
           Oliver
-          <em className="block not-italic font-normal text-[1.05em] text-chalk/90">Lin</em>
+          <em className="block not-italic font-normal text-[1.05em] text-white/90">Lin</em>
         </h1>
-        <div className="w-9 h-0.5 bg-chalk/35 mt-3.5 mb-3 shrink-0" />
-        <p className="text-[10px] tracking-[3px] uppercase text-chalk/80">
+        <div className="w-9 h-0.5 bg-white/35 mt-3.5 mb-3 shrink-0" />
+        <p className="text-[10px] tracking-[3px] uppercase text-white/80">
           Software Engineer
         </p>
       </div>
 
-      <p className="text-[11px] font-light leading-[1.7] text-chalk/75">
+      <p className="text-[11px] font-light leading-[1.7] text-white">
         Full-stack dev & user-focused software.
       </p>
 
@@ -40,22 +40,21 @@ export function CoverPanel() {
           const external = item.href.startsWith('http');
 
           return (
-            <a
-              key={item.label}
-              href={item.href}
-              className="flex items-center gap-1.75 no-underline group"
-              target={external ? '_blank' : undefined}
-              rel={external ? 'noopener noreferrer' : undefined}
-              draggable={false}
-              onClick={(event) => { event.stopPropagation(); }}
-            >
-              <span className="text-chalk/70 shrink-0 transition-colors duration-150 group-hover:text-chalk">
+            <div key={item.label} className="flex items-center gap-1.75">
+              <span className="text-white/70 shrink-0">
                 {item.icon}
               </span>
-              <span className="text-[10px] font-light text-chalk/80 break-all transition-colors duration-150 group-hover:text-chalk">
+              <a
+                href={item.href}
+                className="text-[10px] font-light text-white break-all no-underline transition-colors duration-150 hover:text-blue-300"
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
+                draggable={false}
+                onClick={(event) => { event.stopPropagation(); }}
+              >
                 {item.value}
-              </span>
-            </a>
+              </a>
+            </div>
           );
         })}
       </div>
