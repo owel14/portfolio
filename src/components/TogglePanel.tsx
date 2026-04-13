@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
+import { cx } from './cx';
 
 export type PanelSide = 'left' | 'right';
 
@@ -20,7 +21,7 @@ export function TogglePanel({ side, folded, onToggle, children }: TogglePanelPro
 
   return (
     <div
-      className={`panel panel-${side}`}
+      className={cx('panel', `panel-${side}`)}
       role="button"
       tabIndex={0}
       aria-pressed={!folded}

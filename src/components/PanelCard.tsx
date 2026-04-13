@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
+import { cx } from './cx';
+
+export type PanelCardLayout = 'stacked' | 'inline';
 
 type PanelCardProps = {
   title: string;
   badge: string;
   subtitle?: string;
-  layout: 'stacked' | 'inline';
+  layout: PanelCardLayout;
   isFirst?: boolean;
   isLast?: boolean;
   children: ReactNode;
@@ -22,28 +25,25 @@ export function PanelCard({
   const stacked = layout === 'stacked';
 
   return (
-    <div className={[
+    <div className={cx(
       'flex flex-col',
       stacked ? 'gap-0.5' : 'gap-1.5',
-      isFirst ? '' : 'pt-1',
-      isLast ? '' : 'pb-1',
-      isLast ? '' : 'border-b border-ink/10',
-    ].filter(Boolean).join(' ')}>
+      !isFirst && 'pt-1',
+      !isLast && 'pb-1 border-b border-ink/10'
+    )}>
 
       {stacked ? (
-        <>
-          <div className="flex flex-col gap-px">
-            <span className="text-sm font-semibold text-ink leading-[1.2]">{title}</span>
-            {subtitle ? (
-              <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-                <span className="text-xs font-light italic text-ink">{subtitle}</span>
-                <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
-              </div>
-            ) : (
-              <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary">{badge}</span>
-            )}
-          </div>
-        </>
+        <div className="flex flex-col gap-px">
+          <span className="text-sm font-semibold text-ink leading-[1.2]">{title}</span>
+          {subtitle ? (
+            <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+              <span className="text-xs font-light italic text-ink">{subtitle}</span>
+              <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
+            </div>
+          ) : (
+            <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary">{badge}</span>
+          )}
+        </div>
       ) : (
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-semibold text-ink flex-1 min-w-0">{title}</span>
@@ -51,7 +51,7 @@ export function PanelCard({
         </div>
       )}
 
-      <ul className={`list-none flex flex-col gap-0.75 ${stacked ? 'mt-0.5 pl-2' : ''}`}>
+      <ul className={cx('list-none flex flex-col gap-0.75', stacked && 'mt-0.5 pl-2')}>
         {children}
       </ul>
     </div>

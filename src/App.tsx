@@ -20,27 +20,21 @@ export default function App() {
   const [folds, setFolds] = useState<FoldState>({ left: true, right: true, top: 'left' });
   const { stageRef, pamphletRef, stageProps, pamphletProps } = usePamphletRotation();
 
-  const toggleLeft = useCallback((): void => {
+  const togglePanel = useCallback((side: PanelSide): void => {
     setFolds((current) => {
-      const left = !current.left;
+      const nextFolded = !current[side];
+      const oppositeSide = side === 'left' ? 'right' : 'left';
+
       return {
         ...current,
-        left,
-        top: left ? 'left' : current.right ? 'right' : current.top,
+        [side]: nextFolded,
+        top: nextFolded ? side : current[oppositeSide] ? oppositeSide : current.top,
       };
     });
   }, []);
 
-  const toggleRight = useCallback((): void => {
-    setFolds((current) => {
-      const right = !current.right;
-      return {
-        ...current,
-        right,
-        top: right ? 'right' : current.left ? 'left' : current.top,
-      };
-    });
-  }, []);
+  const toggleLeft = useCallback((): void => { togglePanel('left'); }, [togglePanel]);
+  const toggleRight = useCallback((): void => { togglePanel('right'); }, [togglePanel]);
 
   return (
     <main

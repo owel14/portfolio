@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cx } from './cx';
 
 type PanelCtaProps = {
   children: ReactNode;
@@ -13,7 +14,7 @@ const themeClass = {
 
 export function PanelCta({ children, theme = 'ink' }: PanelCtaProps) {
   return (
-    <p className={`mt-auto text-[9px] tracking-[2px] uppercase ${themeClass[theme]}`}>
+    <p className={cx('mt-auto text-[9px] tracking-[2px] uppercase', themeClass[theme])}>
       {children}
     </p>
   );

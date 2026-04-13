@@ -9,8 +9,8 @@
   --color-ink-secondary: #3d3128;
   --color-rule: #c8baa6;
   --color-chalk: #f2ece0;
-  --font-family-serif: 'Libre Baskerville', Georgia, serif;
-  --font-family-sans: 'Source Sans 3', system-ui, sans-serif;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-sans: 'Source Sans 3', system-ui, sans-serif;
 }
 
 /* ══════════════════════════════════════════
@@ -35,7 +35,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background: #ffffff;
-  font-family: 'Source Sans 3', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
 }
