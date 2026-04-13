@@ -1,6 +1,7 @@
 import { Mail, Phone } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon } from '../BrandIcons';
 import type { ReactElement } from 'react';
+import { PanelCta } from '../PanelCta';
 
 type ContactItem = {
   readonly label: string;
@@ -20,26 +21,26 @@ export function CoverPanel() {
   return (
     <div className="panel-content">
       <div className="flex flex-col">
-        <h1 className="font-serif text-[clamp(26px,3.2vw,48px)] font-bold leading-[1.05] text-chalk">
+        <h1 className="font-serif text-4xl font-bold leading-[1.05] text-chalk">
           Oliver
           <em className="block not-italic font-normal text-[1.05em] text-chalk/90">Lin</em>
         </h1>
-        <div className="w-9 h-0.5 bg-chalk/35 mt-[14px] mb-3 shrink-0" />
-        <p className="text-[clamp(9px,0.9vw,11px)] tracking-[3px] uppercase text-chalk/80">
+        <div className="w-9 h-0.5 bg-chalk/35 mt-3.5 mb-3 shrink-0" />
+        <p className="text-[10px] tracking-[3px] uppercase text-chalk/80">
           Software Engineer
         </p>
       </div>
 
-      <p className="text-[clamp(10px,0.95vw,12px)] font-light leading-[1.7] text-chalk/75">
+      <p className="text-[11px] font-light leading-[1.7] text-chalk/75">
         Full-stack dev & user-focused software.
       </p>
 
-      <div className="flex flex-col gap-[7px]">
+      <div className="flex flex-col gap-1.75">
         {contact.map((item) => (
           <a
             key={item.label}
             href={item.href}
-            className="flex items-center gap-[7px] no-underline group"
+            className="flex items-center gap-1.75 no-underline group"
             target={item.href.startsWith('http') ? '_blank' : undefined}
             rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             draggable={false}
@@ -48,16 +49,14 @@ export function CoverPanel() {
             <span className="text-chalk/70 shrink-0 transition-colors duration-150 group-hover:text-chalk">
               {item.icon}
             </span>
-            <span className="text-[clamp(9px,0.88vw,11px)] font-light text-chalk/80 break-all transition-colors duration-150 group-hover:text-chalk">
+            <span className="text-[10px] font-light text-chalk/80 break-all transition-colors duration-150 group-hover:text-chalk">
               {item.value}
             </span>
           </a>
         ))}
       </div>
 
-      <p className="mt-auto text-[9px] tracking-[2.5px] uppercase text-chalk/50">
-        Open to unfold ›
-      </p>
+      <PanelCta theme="chalk-dim">Open to unfold ›</PanelCta>
     </div>
   );
 }
