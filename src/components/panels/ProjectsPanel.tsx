@@ -3,7 +3,7 @@ import { PanelEntryList } from "../PanelEntryList";
 import type { PanelEntry } from "../PanelEntryList";
 import { SectionHeader } from "../SectionHeader";
 
-const projectEntries = [
+export const projectEntries = [
   {
     title: "Timesheet System",
     badge: "Internship",

@@ -3,7 +3,7 @@ import { PanelEntryList } from '../PanelEntryList';
 import type { PanelEntry } from '../PanelEntryList';
 import { SectionHeader } from '../SectionHeader';
 
-const experienceEntries = [
+export const experienceEntries = [
   {
     title: 'CodeHQ',
     badge: 'Dec 2024 – Feb 2025',

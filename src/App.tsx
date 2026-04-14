@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { cx } from './components/cx';
+import { MobileView } from './components/MobileView';
 import { TogglePanel } from './components/TogglePanel';
 import type { PanelSide } from './components/TogglePanel';
 import {
@@ -37,6 +38,8 @@ export default function App() {
   const toggleRight = useCallback((): void => { togglePanel('right'); }, [togglePanel]);
 
   return (
+    <>
+    <MobileView />
     <main
       className={cx(
         'pamphlet-root',
@@ -85,5 +88,6 @@ export default function App() {
       <p className="hint text-[10px] font-light tracking-[2.5px] uppercase text-white/15 select-none transition-opacity duration-[400ms]">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
 
     </main>
+    </>
   );
 }

@@ -10,7 +10,7 @@ type ContactItem = {
   readonly icon: ReactElement;
 };
 
-const contact = [
+export const contact = [
   { label: 'Email', value: 'oliverlin146@gmail.com', href: 'mailto:oliverlin146@gmail.com', icon: <Mail size={10} strokeWidth={1.5} /> },
   { label: 'Phone', value: '+64 20 4162 8840', href: 'tel:+642041628840', icon: <Phone size={10} strokeWidth={1.5} /> },
   { label: 'LinkedIn', value: 'linkedin.com/in/oliver-k-lin', href: 'https://linkedin.com/in/oliver-k-lin/', icon: <LinkedInIcon size={10} /> },

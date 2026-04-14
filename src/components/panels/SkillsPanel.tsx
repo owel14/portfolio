@@ -15,7 +15,7 @@ type Reference = {
   readonly phone?: string;
 };
 
-const skillGroups = [
+export const skillGroups = [
   {
     label: "Languages",
     items: [
@@ -56,7 +56,7 @@ const skillGroups = [
   },
 ] as const satisfies readonly SkillGroup[];
 
-const references: readonly Reference[] = [
+export const references: readonly Reference[] = [
   {
     name: "Winston Chow",
     role: "Chief Talent Officer · CodeHQ",

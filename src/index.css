@@ -333,34 +333,16 @@ body {
 /* ══════════════════════════════════════════
    MOBILE
 ══════════════════════════════════════════ */
+.mobile-view {
+  display: none;
+}
+
 @media (max-width: 700px) {
-  :root { --pw: 29vw; }
+  .pamphlet-root { display: none; }
 
-  .pamphlet-root {
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    padding: 18px 12px;
+  .mobile-view {
+    display: flex;
+    flex-direction: column;
     min-height: 100svh;
-  }
-
-  .pamphlet-stage {
-    width: 100%;
-    min-height: min(calc(var(--ph) + 112px), calc(100svh - 82px));
-    perspective: 1250px;
-    perspective-origin: 50% 42%;
-  }
-
-  .pamphlet-stage::before { display: none; }
-
-  .pamphlet {
-    width: calc(var(--pw) * 3);
-    height: var(--ph);
-    perspective: 1450px;
-  }
-
-  .panel-content {
-    padding: 18px 14px 20px;
-    gap: 8px;
   }
 }
