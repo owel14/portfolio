@@ -14,7 +14,7 @@ const projectEntries = [
   {
     title: "Vector DB Research",
     badge: "Research",
-    href: "/pdf/report.pdf",
+    href: `${import.meta.env.BASE_URL}pdf/report.pdf`,
     titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
     bullets: [
       "Optimized data querying for terabyte-scale datasets that exceed main memory capacity",

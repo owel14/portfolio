@@ -3,7 +3,7 @@ import { SectionHeader } from '../SectionHeader';
 export function ProfilePanel() {
   return (
     <div className="panel-content">
-      <img src="/img/profile.jpg" alt="Profile" className="size-40 rounded-full object-cover object-[center_40%] shrink-0 self-center mx-auto border border-chalk/20 mt-4" />
+      <img src={`${import.meta.env.BASE_URL}img/profile.jpg`} alt="Profile" className="size-40 rounded-full object-cover object-[center_40%] shrink-0 self-center mx-auto border border-chalk/20 mt-4" />
 
       <div className="flex flex-col gap-3 mt-4">
         <SectionHeader theme="chalk">Career Objective</SectionHeader>
