@@ -11,6 +11,7 @@ import {
   SkillsPanel,
   ProfilePanel,
 } from './components/panels';
+import { playPageFlip } from './pageFlipSound';
 import { usePamphletRotation } from './usePamphletRotation';
 
 type FoldState = Record<PanelSide, boolean> & {
@@ -22,6 +23,8 @@ export default function App() {
   const { stageRef, pamphletRef, stageProps, pamphletProps } = usePamphletRotation();
 
   const togglePanel = useCallback((side: PanelSide): void => {
+    playPageFlip(folds[side] ? 'open' : 'close');
+
     setFolds((current) => {
       const nextFolded = !current[side];
       const oppositeSide = side === 'left' ? 'right' : 'left';
@@ -32,7 +35,7 @@ export default function App() {
         top: nextFolded ? side : current[oppositeSide] ? oppositeSide : current.top,
       };
     });
-  }, []);
+  }, [folds]);
 
   const toggleLeft = useCallback((): void => { togglePanel('left'); }, [togglePanel]);
   const toggleRight = useCallback((): void => { togglePanel('right'); }, [togglePanel]);
@@ -85,7 +88,7 @@ export default function App() {
         </div>
       </div>
 
-      <p className="hint text-[10px] font-light tracking-[2.5px] uppercase text-white/15 select-none transition-opacity duration-[400ms]">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
+      <p className="hint text-[0.625rem] font-light tracking-[0.25em] uppercase text-white/15 select-none transition-opacity duration-[400ms]">drag to rotate in 3D · click panels to fold · arrow keys rotate</p>
 
     </main>
     </>

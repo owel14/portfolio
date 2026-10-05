@@ -73,7 +73,7 @@ export const references: readonly Reference[] = [
 export function SkillsPanel() {
   return (
     <div className="panel-content">
-      <SectionHeader icon={<GraduationCap size={10} strokeWidth={1.5} />}>
+      <SectionHeader icon={<GraduationCap className="size-2.5" strokeWidth={1.5} />}>
         Education
       </SectionHeader>
       <PanelCard
@@ -88,7 +88,7 @@ export function SkillsPanel() {
       </PanelCard>
 
       <div className="flex flex-col gap-2 pt-2 border-t border-rule">
-        <SectionHeader icon={<Code2 size={10} strokeWidth={1.5} />}>
+        <SectionHeader icon={<Code2 className="size-2.5" strokeWidth={1.5} />}>
           Skills
         </SectionHeader>
         <div className="flex flex-col gap-3">
@@ -101,7 +101,7 @@ export function SkillsPanel() {
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="text-[10px] font-medium text-ink bg-white/70 border border-ink/10 rounded px-1.5 py-0.5"
+                    className="text-[0.625rem] font-medium text-ink bg-white/70 border border-ink/10 rounded px-1.5 py-0.5"
                   >
                     {item}
                   </span>
@@ -113,7 +113,7 @@ export function SkillsPanel() {
       </div>
 
       <div className="flex flex-col gap-2 pt-2 border-t border-rule">
-        <SectionHeader icon={<Users size={10} strokeWidth={1.5} />}>
+        <SectionHeader icon={<Users className="size-2.5" strokeWidth={1.5} />}>
           References
         </SectionHeader>
 
@@ -128,11 +128,11 @@ export function SkillsPanel() {
             <span className="text-xs font-light text-ink">
               {reference.role}
             </span>
-            <span className="text-[11px] font-light text-ink-secondary break-all">
+            <span className="text-[0.6875rem] font-light text-ink-secondary break-all">
               {reference.email}
             </span>
             {reference.phone === undefined ? null : (
-              <span className="text-[11px] font-light text-ink-secondary break-all">
+              <span className="text-[0.6875rem] font-light text-ink-secondary break-all">
                 {reference.phone}
               </span>
             )}

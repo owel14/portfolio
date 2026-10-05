@@ -17,7 +17,8 @@
    TOKENS
 ══════════════════════════════════════════ */
 :root {
-  --pw: 40vh;
+  /* Panel width: as large as the viewport allows while the open pamphlet (3 panels wide) still fits. */
+  --pw: min(40vh, 29vw);
   --ph: calc(var(--pw) * 2.121);
   --dur: 0.68s;
   --ease: cubic-bezier(0.22, 1.0, 0.36, 1);
@@ -31,6 +32,12 @@
 /* ══════════════════════════════════════════
    SCENE
 ══════════════════════════════════════════ */
+/* 1rem tracks the panel width (16px at a 320px panel), so text, icons and spacing
+   scale with the pamphlet instead of staying fixed while the panels grow. */
+html {
+  font-size: calc(var(--pw) / 20);
+}
+
 body {
   min-height: 100vh;
   overflow-x: hidden;
@@ -58,13 +65,13 @@ body {
 }
 
 .pamphlet-stage {
-  --stage-pad: 2vw;
+  --stage-pad: calc(var(--pw) * 0.09);
   width: min(100%, calc((var(--pw) * 3) + (var(--stage-pad) * 2)));
-  min-height: min(calc(var(--ph) + (var(--stage-pad) * 1.5)), calc(100vh - 118px));
+  min-height: calc(var(--ph) + var(--stage-pad));
   position: relative;
   display: grid;
   place-items: center;
-  perspective: 1800px;
+  perspective: calc(var(--pw) * 5.625);
   perspective-origin: 50% 44%;
   transform-style: preserve-3d;
   cursor: grab;
@@ -85,7 +92,7 @@ body {
   width: calc(var(--pw) * 3);
   height: var(--ph);
   position: relative;
-  perspective: 2200px;
+  perspective: calc(var(--pw) * 6.875);
   perspective-origin: 50% 50%;
   transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz));
   transform-style: preserve-3d;
@@ -98,7 +105,7 @@ body {
 
 .pamphlet:focus-visible {
   outline: 2px solid rgba(242,236,224,0.68);
-  outline-offset: 16px;
+  outline-offset: 1rem;
 }
 
 /* ══════════════════════════════════════════
@@ -117,7 +124,7 @@ body {
 
 .panel[role="button"]:focus-visible {
   outline: 2px solid rgba(242,236,224,0.68);
-  outline-offset: -6px;
+  outline-offset: -0.375rem;
 }
 
 .panel-left {
@@ -129,8 +136,8 @@ body {
   user-select: none;
   box-shadow:
     inset -1px 0 0 rgba(255,255,255,0.60),
-    inset -5px 0 10px rgba(0,0,0,0.06),
-    5px 0 20px rgba(0,0,0,0.35);
+    inset -0.3125rem 0 0.625rem rgba(0,0,0,0.06),
+    0.3125rem 0 1.25rem rgba(0,0,0,0.35);
 }
 
 .panel-center {
@@ -148,8 +155,8 @@ body {
   user-select: none;
   box-shadow:
     inset 1px 0 0 rgba(255,255,255,0.60),
-    inset 5px 0 10px rgba(0,0,0,0.06),
-    -5px 0 20px rgba(0,0,0,0.35);
+    inset 0.3125rem 0 0.625rem rgba(0,0,0,0.06),
+    -0.3125rem 0 1.25rem rgba(0,0,0,0.35);
 }
 
 /* ══════════════════════════════════════════
@@ -223,8 +230,8 @@ body {
   pointer-events: none;
   z-index: 5;
   background:
-    linear-gradient(to right, rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px, rgba(0,0,0,0.04) 16px, transparent 32px),
-    linear-gradient(to left,  rgba(0,0,0,0.42) 0px, rgba(0,0,0,0.14) 5px, rgba(0,0,0,0.04) 16px, transparent 32px),
+    linear-gradient(to right, rgba(0,0,0,0.42) 0, rgba(0,0,0,0.14) 0.3125rem, rgba(0,0,0,0.04) 1rem, transparent 2rem),
+    linear-gradient(to left,  rgba(0,0,0,0.42) 0, rgba(0,0,0,0.14) 0.3125rem, rgba(0,0,0,0.04) 1rem, transparent 2rem),
     linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.06) 100%);
   transition: opacity var(--dur) ease;
 }
@@ -246,8 +253,8 @@ body {
   content: '';
   position: absolute;
   top: 0; bottom: 0; right: 0;
-  width: 4px;
-  background: linear-gradient(to left, rgba(255,255,255,0.75) 0px, rgba(255,255,255,0.18) 2px, transparent 4px);
+  width: 0.25rem;
+  background: linear-gradient(to left, rgba(255,255,255,0.75) 0, rgba(255,255,255,0.18) 0.125rem, transparent 0.25rem);
   pointer-events: none;
   z-index: 5;
 }
@@ -255,8 +262,8 @@ body {
   content: '';
   position: absolute;
   top: 0; bottom: 0; left: 0;
-  width: 4px;
-  background: linear-gradient(to right, rgba(255,255,255,0.75) 0px, rgba(255,255,255,0.18) 2px, transparent 4px);
+  width: 0.25rem;
+  background: linear-gradient(to right, rgba(255,255,255,0.75) 0, rgba(255,255,255,0.18) 0.125rem, transparent 0.25rem);
   pointer-events: none;
   z-index: 5;
 }
@@ -265,8 +272,8 @@ body {
   content: '';
   position: absolute;
   top: 0; bottom: 0; left: 0;
-  width: 4px;
-  background: linear-gradient(to right, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.08) 2px, transparent 4px);
+  width: 0.25rem;
+  background: linear-gradient(to right, rgba(255,255,255,0.35) 0, rgba(255,255,255,0.08) 0.125rem, transparent 0.25rem);
   pointer-events: none;
   z-index: 5;
 }
@@ -274,8 +281,8 @@ body {
   content: '';
   position: absolute;
   top: 0; bottom: 0; right: 0;
-  width: 4px;
-  background: linear-gradient(to left, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.08) 2px, transparent 4px);
+  width: 0.25rem;
+  background: linear-gradient(to left, rgba(255,255,255,0.35) 0, rgba(255,255,255,0.08) 0.125rem, transparent 0.25rem);
   pointer-events: none;
   z-index: 5;
 }
@@ -315,10 +322,10 @@ body {
    PANEL CONTENT
 ══════════════════════════════════════════ */
 .panel-content {
-  padding: 28px 24px 22px;
+  padding: 1.75rem 1.5rem 1.375rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   position: relative;
   z-index: 1;
   height: 100%;
@@ -337,7 +344,10 @@ body {
   display: none;
 }
 
-@media (max-width: 700px) {
+/* Below this size the pamphlet's text would drop under ~10px, so switch to the vertical layout. */
+@media (max-width: 899px), (max-height: 599px) {
+  html { font-size: 100%; }
+
   .pamphlet-root { display: none; }
 
   .mobile-view {

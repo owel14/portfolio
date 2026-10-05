@@ -16,7 +16,7 @@ const themeClass = {
 
 export function SectionHeader({ icon, children, theme = 'ink', className }: SectionHeaderProps) {
   return (
-    <div className={cx('flex items-center gap-1.25 text-[11px] tracking-[2.5px] uppercase font-bold', themeClass[theme], className)}>
+    <div className={cx('flex items-center gap-1.25 text-[0.6875rem] tracking-[0.23em] uppercase font-bold', themeClass[theme], className)}>
       {icon}
       {children}
     </div>
