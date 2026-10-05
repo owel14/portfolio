@@ -52,10 +52,10 @@ export function PanelCard({
           {subtitle ? (
             <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
               <span className="text-xs font-light italic text-ink">{subtitle}</span>
-              <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
+              <span className="text-[0.59375rem] tracking-[0.16em] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
             </div>
           ) : (
-            <span className="text-[9.5px] tracking-[1.5px] uppercase text-ink-secondary">{badge}</span>
+            <span className="text-[0.59375rem] tracking-[0.16em] uppercase text-ink-secondary">{badge}</span>
           )}
         </div>
       ) : (
@@ -79,7 +79,7 @@ export function PanelCard({
               {titleContent}
             </a>
           )}
-          <span className="text-[9px] tracking-[1.8px] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
+          <span className="text-[0.5625rem] tracking-[0.2em] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
         </div>
       )}
 

@@ -36,7 +36,7 @@ export const experienceEntries = [
 export function ExperiencePanel() {
   return (
     <div className="panel-content">
-      <SectionHeader icon={<Briefcase size={10} strokeWidth={1.5} />}>Experience</SectionHeader>
+      <SectionHeader icon={<Briefcase className="size-2.5" strokeWidth={1.5} />}>Experience</SectionHeader>
       <PanelEntryList entries={experienceEntries} layout="stacked" />
     </div>
   );

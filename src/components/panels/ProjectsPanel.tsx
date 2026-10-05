@@ -15,7 +15,7 @@ export const projectEntries = [
     title: "Vector DB Research",
     badge: "Research",
     href: `${import.meta.env.BASE_URL}pdf/report.pdf`,
-    titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
+    titleIcon: <ExternalLink className="size-2.25" strokeWidth={1.8} />,
     bullets: [
       "Optimized data querying for terabyte-scale datasets that exceed main memory capacity",
       "Researched and implemented novel techniques in C++ to achieve a 15% performance gain",
@@ -33,7 +33,7 @@ export const projectEntries = [
     title: "Multiplayer Web Game",
     badge: "Personal",
     href: "https://chopsticks-online.vercel.app/",
-    titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
+    titleIcon: <ExternalLink className="size-2.25" strokeWidth={1.8} />,
     bullets: [
       "Created an interactive online multiplayer game based on the chopsticks hand game with React Next.js frontend and C# ASP .NET Core backend",
     ],
@@ -42,7 +42,7 @@ export const projectEntries = [
     title: "Custom Webshop",
     badge: "Personal",
     href: "https://tastyroast.co.nz/",
-    titleIcon: <ExternalLink size={9} strokeWidth={1.8} />,
+    titleIcon: <ExternalLink className="size-2.25" strokeWidth={1.8} />,
     bullets: [
       "Created an end-to-end custom e-commerce solution with React Next.js frontend and C# ASP .NET Core backend, integrating payment processing and inventory management",
     ],
@@ -52,7 +52,7 @@ export const projectEntries = [
 export function ProjectsPanel() {
   return (
     <div className="panel-content">
-      <SectionHeader icon={<FolderOpen size={10} strokeWidth={1.5} />}>
+      <SectionHeader icon={<FolderOpen className="size-2.5" strokeWidth={1.5} />}>
         Projects
       </SectionHeader>
       <PanelEntryList entries={projectEntries} layout="inline" />

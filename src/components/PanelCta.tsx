@@ -14,7 +14,7 @@ const themeClass = {
 
 export function PanelCta({ children, theme = 'ink' }: PanelCtaProps) {
   return (
-    <p className={cx('mt-auto text-[9px] tracking-[2px] uppercase', themeClass[theme])}>
+    <p className={cx('mt-auto text-[0.5625rem] tracking-[0.22em] uppercase', themeClass[theme])}>
       {children}
     </p>
   );
