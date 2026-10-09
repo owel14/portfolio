@@ -16,7 +16,7 @@ export function MobileView() {
       <div className="bg-navy px-6 pt-14 pb-10 flex flex-col items-center gap-5">
         <img
           src={`${import.meta.env.BASE_URL}img/profile.jpg`}
-          alt="Profile"
+          alt="Oliver Lin"
           className="size-28 rounded-full object-cover object-[center_40%] border-2 border-white/20"
         />
 

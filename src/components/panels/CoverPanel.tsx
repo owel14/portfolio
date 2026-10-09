@@ -22,7 +22,7 @@ export function CoverPanel() {
     <div className="panel-content">
       <div className="flex flex-col">
         <h1 className="font-serif text-4xl font-bold leading-[1.05] text-white">
-          Oliver
+          Oliver{' '}
           <em className="block not-italic font-normal text-[1.05em] text-white/90">Lin</em>
         </h1>
         <div className="w-9 h-0.5 bg-white/35 mt-3.5 mb-3 shrink-0" />

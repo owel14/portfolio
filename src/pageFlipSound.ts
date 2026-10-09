@@ -7,12 +7,15 @@ function createSound(path: string): HTMLAudioElement {
 }
 
 // Created up front so the first flip plays without waiting on a download.
-const sounds: Record<FlipDirection, HTMLAudioElement> = {
+// Skipped when prerendering at build time, where there is no Audio.
+const sounds: Record<FlipDirection, HTMLAudioElement> | null = typeof Audio === 'undefined' ? null : {
   open: createSound('sounds/flipping-page-back.mp3'),
   close: createSound('sounds/flipping-page-forward.mp3'),
 };
 
 export function playPageFlip(direction: FlipDirection): void {
+  if (sounds === null) return;
+
   const audio = sounds[direction];
   // Restart rather than ignore when a panel is toggled again mid-sound.
   audio.currentTime = 0;
