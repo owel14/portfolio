@@ -48,7 +48,7 @@ export function PanelCard({
 
       {stacked ? (
         <div className="flex flex-col gap-px">
-          <span className="text-xs font-semibold text-ink leading-[1.2]">{title}</span>
+          <h3 className="text-xs font-semibold text-ink leading-[1.2]">{title}</h3>
           {subtitle ? (
             <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
               <span className="text-xs font-light italic text-ink">{subtitle}</span>
@@ -61,23 +61,25 @@ export function PanelCard({
       ) : (
         <div className="flex items-center gap-1.5">
           {href === undefined ? (
-            <span className={cx(
+            <h3 className={cx(
               'flex items-center gap-1 text-xs font-semibold text-ink flex-1 min-w-0',
               titleIcon !== undefined && 'group/title hover:text-blue-600'
             )}>
               {titleContent}
-            </span>
+            </h3>
           ) : (
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/title flex items-center gap-1 text-xs font-semibold text-ink flex-1 min-w-0 no-underline hover:text-blue-600"
-              draggable={false}
-              onClick={(event) => { event.stopPropagation(); }}
-            >
-              {titleContent}
-            </a>
+            <h3 className="flex flex-1 min-w-0 text-xs font-semibold">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/title flex items-center gap-1 text-ink no-underline hover:text-blue-600"
+                draggable={false}
+                onClick={(event) => { event.stopPropagation(); }}
+              >
+                {titleContent}
+              </a>
+            </h3>
           )}
           <span className="text-[0.5625rem] tracking-[0.2em] uppercase text-ink-secondary ml-auto whitespace-nowrap">{badge}</span>
         </div>
